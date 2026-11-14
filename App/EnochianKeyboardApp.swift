@@ -27,16 +27,19 @@ struct ContentView: View {
             ComposerView(sample: screenshotIndex != nil ? "MADRIAX DS PRAF" : nil)
                 .tabItem { Label(L("書く", "Write"), systemImage: "pencil.and.scribble") }
                 .tag(0)
-            SetupView()
-                .tabItem { Label(L("キーボード", "Keyboard"), systemImage: "keyboard") }
+            PracticeView(sample: screenshotIndex != nil ? "ZACAR OD ZAMRAN" : nil)
+                .tabItem { Label(L("試す", "Try"), systemImage: "keyboard") }
                 .tag(1)
             AlphabetView()
                 .tabItem { Label(L("文字と言葉", "Letters"), systemImage: "character.book.closed") }
                 .tag(2)
+            SetupView()
+                .tabItem { Label(L("準備", "Set Up"), systemImage: "gearshape") }
+                .tag(3)
         }
         .tint(Obsidian.gold)
         .onAppear {
-            if let i = screenshotIndex { tab = [0, 2, 1][i - 1] }
+            if let i = screenshotIndex { tab = [1, 0, 2][i - 1] }
         }
     }
 }

@@ -1,8 +1,8 @@
-import jwt, time, requests, os, hashlib
+import jwt, time, requests, os, hashlib, sys
 
 KEY_ID = 'WDXGY9WX55'
 ISSUER = '2be0734f-943a-4d61-9dc9-5d9045c46fec'
-APP_ID = '6792130121'
+APP_ID = open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'app_id.txt')).read().strip()
 KEY_PATH = '/tmp/asc_key.p8'
 
 p8 = open(KEY_PATH).read()
@@ -43,7 +43,9 @@ def upload_file(set_id, filepath):
     for op in ss['attributes']['uploadOperations']:
         req_headers = {h['name']: h['value'] for h in op['requestHeaders']}
         chunk = data[op['offset']:op['offset'] + op['length']]
-        requests.put(op['url'], headers=req_headers, data=chunk)
+        put = requests.put(op['url'], headers=req_headers, data=chunk)
+        if put.status_code >= 400:
+            sys.exit(f'chunk upload failed: {put.status_code}')
     api('PATCH', f'/appScreenshots/{ss_id}', json={'data': {
         'type': 'appScreenshots', 'id': ss_id,
         'attributes': {'sourceFileChecksum': checksum, 'uploaded': True}
@@ -76,8 +78,9 @@ for loc in locs:
     for s in r.json().get('data', []):
         api('DELETE', f'/appScreenshotSets/{s["id"]}')
 
+    lang = 'ja' if locale.startswith('ja') else 'en'
     for display_type, prefix in DISPLAY_TYPES:
-        files = [os.path.join(screenshot_dir, f'{prefix}_{m}.png') for m in modes]
+        files = [os.path.join(screenshot_dir, f'{prefix}_{lang}_{m}.png') for m in modes]
         if not all(os.path.exists(f) for f in files):
             print(f'  Skipping {display_type} (missing files)')
             continue

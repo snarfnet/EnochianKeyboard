@@ -1,8 +1,8 @@
-import jwt, time, requests, sys
+import jwt, time, requests, sys, os
 
 KEY_ID = 'WDXGY9WX55'
 ISSUER = '2be0734f-943a-4d61-9dc9-5d9045c46fec'
-APP_ID = '6792130121'
+APP_ID = open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'app_id.txt')).read().strip()
 BUILD_NUMBER = sys.argv[1]
 
 p8 = open('/tmp/asc_key.p8').read()
