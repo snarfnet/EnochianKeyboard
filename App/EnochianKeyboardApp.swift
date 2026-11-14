@@ -24,7 +24,7 @@ struct ContentView: View {
 
     var body: some View {
         TabView(selection: $tab) {
-            ComposerView(sample: screenshotIndex != nil ? "MADRIAX DS PRAF" : nil)
+            ComposerView(sample: screenshotIndex != nil ? "MADRIAX" : nil)
                 .tabItem { Label(L("書く", "Write"), systemImage: "pencil.and.scribble") }
                 .tag(0)
             PracticeView(sample: screenshotIndex != nil ? "ZACAR OD ZAMRAN" : nil)

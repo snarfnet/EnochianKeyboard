@@ -6,7 +6,7 @@ struct SetupView: View {
     private let steps: [(String, String)] = [
         ("「設定」アプリを開く（下のボタンでも開けます）", "Open the Settings app (or tap the button below)"),
         ("一般 ＞ キーボード ＞ キーボード ＞ 新しいキーボードを追加", "General › Keyboard › Keyboards › Add New Keyboard"),
-        ("「エノク文字キーボード」を選ぶ", "Choose \"Enochian Keyboard\""),
+        ("「Enochian Keyboard」を選ぶ", "Choose \"Enochian Keyboard\""),
         ("文字を打つときに 🌐 を押して切り替える", "Tap 🌐 while typing to switch to it"),
     ]
 

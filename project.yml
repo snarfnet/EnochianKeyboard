@@ -32,7 +32,7 @@ targets:
       path: App/Info.plist
       properties:
         CFBundleName: EnochianKeyboard
-        CFBundleDisplayName: エノク文字キーボード
+        CFBundleDisplayName: Enochian Keyboard
         CFBundleDevelopmentRegion: ja
         CFBundleLocalizations: [ja, en]
         CFBundleShortVersionString: "1.0"
@@ -62,7 +62,7 @@ targets:
     info:
       path: Keyboard/Info.plist
       properties:
-        CFBundleDisplayName: エノク文字キーボード
+        CFBundleDisplayName: Enochian Keyboard
         CFBundleDevelopmentRegion: ja
         CFBundleLocalizations: [ja, en]
         CFBundleShortVersionString: "1.0"
