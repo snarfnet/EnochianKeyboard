@@ -33,8 +33,9 @@ MIN_PART_AREA = 40        # dots and detached strokes that belong to a glyph
 UPM = 1000
 CAP = 640                 # median glyph height in font units
 ASCENT, DESCENT = 900, -260
-SIDE = 70
+SIDE = 90
 UPSCALE = 4
+SMOOTH = 7               # source-pixel kernel for speckle removal
 ALIASES = {"K": "C", "J": "I", "Y": "I", "U": "V", "W": "V"}
 
 
@@ -76,15 +77,19 @@ def outlines(mask, box):
     x0, y0, x1, y1 = box[:4]
     pad = 8
     crop = mask[y0 - pad:y1 + pad, x0 - pad:x1 + pad]
+    # knock off the scan's ink speckle: fill pits, then shave burrs
+    k = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (SMOOTH, SMOOTH))
+    crop = cv2.morphologyEx(crop, cv2.MORPH_CLOSE, k)
+    crop = cv2.morphologyEx(crop, cv2.MORPH_OPEN, k)
     up = cv2.resize(crop, None, fx=UPSCALE, fy=UPSCALE, interpolation=cv2.INTER_CUBIC)
-    up = cv2.GaussianBlur(up, (0, 0), sigmaX=3.2)
+    up = cv2.GaussianBlur(up, (0, 0), sigmaX=9)
     _, up = cv2.threshold(up, 128, 255, cv2.THRESH_BINARY)
     cnts, hier = cv2.findContours(up, cv2.RETR_CCOMP, cv2.CHAIN_APPROX_NONE)
     result = []
     for i, c in enumerate(cnts):
         if cv2.contourArea(c) < 30 * UPSCALE:
             continue
-        approx = cv2.approxPolyDP(c, 1.2, True).reshape(-1, 2).astype(float)
+        approx = cv2.approxPolyDP(c, 1.6, True).reshape(-1, 2).astype(float)
         if len(approx) < 3:
             continue
         # back to source pixels
